@@ -1,0 +1,72 @@
+- Se loguer:
+
+Créer un objet Commande, le stocker dans la session (clé panier)
+
+Chercher une commande pas confirmée :
+- findOneBy (['confirmee'=>false]) pour ce client
+
+Si existe:
+- Obtenir le contenu de la commande et l'afficher où on veut
+ 
+Si elle n'existe pas:
+- D'office créer une commande vide new Commande
+- Persister dans BD
+
+
+addToCart (){
+	// obtenir la commande pas confirmée
+	findOneBy (['confirmee'=>false]) pour ce client
+	// créer le detail commande
+	$p = obtenir de la bd le produit choisi dans l'interface
+	$quantite = obtenir $quantite l'interface 
+
+	$dc = new DetailCommande (['quantite'=> $quantite );
+	$dc->setProduit ($p);
+
+	$commandeSes->addDetailCommande ($dc);
+	persist($commande)
+}
+passerComande (){
+	parcourir l'objet commande pas confirmé
+	calculer le prix total
+	stocker le prix total dans la commande (historique)
+	changer le status de la commande
+	updater la commande (persist + flush)
+
+}
+
+ git clone https://github.com/qferr/happy-shop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- Rajoute/efface de produits du panier
+
+
+// pas BD
+addToCart(){
+
+$commandeSes = $ses->get ('commandeSes');
+
+$ses->set ('panier', $commande);
+
+}
+
+- Confirme:
+
+Stocker l'objet Commande dans la BD
