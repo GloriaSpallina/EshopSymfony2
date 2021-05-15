@@ -25,13 +25,13 @@
                             <a class="nav-link" id="payment-nav" data-toggle="pill" href="#payment-tab" role="tab">Payment Method</a>
                             <a class="nav-link" id="address-nav" data-toggle="pill" href="#address-tab" role="tab">address</a>
                             <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account Details</a>
-                            <a class="nav-link" href="index.html">Logout</a>
+                            <a class="nav-link" href="{{ path('logout') }}">Logout</a>
                         </div>
                     </div>
                     <div class="col-md-9">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="dashboard-tab" role="tabpanel" aria-labelledby="dashboard-nav">
-                                <h4>Dashboard</h4>
+                                <h4>Dashboard de {{ app.user.nom }}  {{ app.user.prenom }}</h4>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros. Aliquam et sapien eget arcu rhoncus scelerisque.
                                 </p> 
@@ -105,16 +105,16 @@
                                 <h4>Account Details</h4>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="text" placeholder="First Name">
+                                        <input type="text" placeholder=" {{ app.user.prenom }}">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" placeholder="Last Name">
+                                        <input type="text" placeholder=" {{ app.user.nom }}">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" placeholder="Mobile">
+                                        <input type="text" placeholder=" {{ app.user.telephone }}">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" placeholder="Email">
+                                        <input type="text" placeholder=" {{ app.user.email }}">
                                     </div>
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Address">

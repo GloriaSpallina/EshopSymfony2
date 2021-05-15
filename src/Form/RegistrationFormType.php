@@ -24,13 +24,16 @@ class RegistrationFormType extends AbstractType
             ->add('prenom')
             ->add('telephone')
             ->add('sexe', ChoiceType::class,[
+                'placeholder' => 'Choose an option',
                 'choices'=>[
                     'Femme'=>'Femme',
                     'Homme'=>'Homme',
                     'Autre'=>'Autre',
                 ],
             ])
-            ->add('dateNaissance',DateType::class)
+            ->add('dateNaissance',DateType::class,[
+                'widget'=> 'single_text'
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [

@@ -45,9 +45,10 @@ class HomeController extends AbstractController
         return $this->render("home/checkout.html.twig");
     }
 
-    #[Route("/my/account", name: 'myaccount')]
+    #[Route("/myaccount", name: 'myaccount')]
     public function myaccount(): Response
     {
+
         return $this->render("home/my-account.html.twig");
     }
 
@@ -64,9 +65,5 @@ class HomeController extends AbstractController
         return $this->render("home/contact.html.twig");
     }
 
-    #[Route("/login2", name: 'login')]
-    public function login(): Response
-    {
-        return $this->render("home/login.html.twig");
-    }
+
 }

@@ -137,14 +137,14 @@ class Adresse
     }
 
     /**
-     * @return Collection|user[]
+     * @return Collection|User[]
      */
     public function getUsers(): Collection
     {
         return $this->Users;
     }
 
-    public function addUser(user $user): self
+    public function addUser(User $user): self
     {
         if (!$this->Users->contains($user)) {
             $this->Users[] = $user;
@@ -154,7 +154,7 @@ class Adresse
         return $this;
     }
 
-    public function removeUser(user $user): self
+    public function removeUser(User $user): self
     {
         if ($this->Users->removeElement($user)) {
             // set the owning side to null (unless already changed)
