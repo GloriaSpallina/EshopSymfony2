@@ -22,8 +22,8 @@
                             <a class="nav-link" href="{{ path ('myaccount') }}">Dashboard</a>
                             <a class="nav-link" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab">Orders</a>
                             <a class="nav-link" id="payment-nav" data-toggle="pill" href="#payment-tab" role="tab">Payment Method</a>
-                            <a class="nav-link active" href="{{ path ('user_adresse') }}">Address</a>
-                            <a class="nav-link" href="{{ path ('user_adresse_livraison') }}">Shipping address</a>
+                            <a class="nav-link" href="{{ path ('user_adresse') }}">Address</a>
+                            <a class="nav-link active" href="{{ path ('user_adresse_livraison') }}">Shipping address</a>
                             <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account Details</a>
                             <a class="nav-link" href="{{ path ('logout') }}">Logout</a>
                         </div>
@@ -33,13 +33,13 @@
                     <div class="col-md-9">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="address-tab" role="tabpanel" aria-labelledby="address-nav">
-                                <h4>Address</h4>
+                                <h4>Shipping Address</h4>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <p>{{adresse.rue}}, n°{{adresse.numero}} {{adresse.boite}}</p>
-                                        <p>{{adresse.codePostal}}, {{adresse.ville}}</p>
-                                        <p>{{adresse.pays}}</p>
-                                        <a href="{{ path ('user_adresse_update')}}">Update</a>
+                                        <p>{{adresseLivraison.rue}}, n°{{adresseLivraison.numero}} {{adresseLivraison.boite}}</p>
+                                        <p>{{adresseLivraison.codePostal}}, {{adresseLivraison.ville}}</p>
+                                        <p>{{adresseLivraison.pays}}</p>
+                                        <a href="{{ path ('user_adresse_livraison_update')}}">Update</a>
                                       
    
                                     </div>
