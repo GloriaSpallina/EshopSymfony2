@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Adresse;
 use App\Entity\AdresseLivraison;
+use App\Entity\CarteBancaire;
 use App\Form\ForulaireAdresseClType;
 use App\Form\FormAdresseLivraisonClType;
+use App\Form\FormCarteBancaireClientType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +29,7 @@ class UserInfosController extends AbstractController
         $CurrentUser = $this->getUser();
         $adresseCurrentUser = $CurrentUser->getAdresse();
         if($adresseCurrentUser !== null){
-            return $this->render("user_adresse/traitement_formulaire_adresse.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse.html.twig",
             ['adresse'=>$adresseCurrentUser]);
         }
         elseif($formulaireAdresse->isSubmitted() && $formulaireAdresse->isValid()){
@@ -42,10 +44,10 @@ class UserInfosController extends AbstractController
             $em->persist($user);
             $em->flush();
         
-            return $this->render("user_adresse/traitement_formulaire_adresse.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse.html.twig",
             ['adresse'=>$adresse]);
         }else{
-            return $this->render("user_adresse/affichage_formulaire_adresse.html.twig",
+            return $this->render("user_infos/affichage_formulaire_adresse.html.twig",
             ['formulaireAdresse'=>$formulaireAdresse->createView()]);
         }
        
@@ -71,10 +73,10 @@ class UserInfosController extends AbstractController
             $em->persist($user);
             $em->flush();
         
-            return $this->render("user_adresse/traitement_formulaire_adresse.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse.html.twig",
             ['adresse'=>$adresse]);
         }else{
-            return $this->render("user_adresse/affichage_formulaire_adresse.html.twig",
+            return $this->render("user_infos/affichage_formulaire_adresse.html.twig",
             ['formulaireAdresse'=>$formulaireAdresse->createView()]);
         }
     }
@@ -92,7 +94,7 @@ class UserInfosController extends AbstractController
         $CurrentUser = $this->getUser();
         $adresseLivraisonCurrentUser = $CurrentUser->getAdresseLivraison();
         if($adresseLivraisonCurrentUser !== null){
-            return $this->render("user_adresse/traitement_formulaire_adresse_livraison.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse_livraison.html.twig",
             ['adresse'=>$adresseLivraisonCurrentUser]);
         }
         elseif($formulaireAdresseLivraison->isSubmitted() && $formulaireAdresseLivraison->isValid()){
@@ -107,10 +109,10 @@ class UserInfosController extends AbstractController
             $em->persist($user);
             $em->flush();
         
-            return $this->render("user_adresse/traitement_formulaire_adresse_livraison.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse_livraison.html.twig",
             ['adresseLivraison'=>$adresseLivraison]);
         }else{
-            return $this->render("user_adresse/affichage_formulaire_adresse_livraison.html.twig",
+            return $this->render("user_infos/affichage_formulaire_adresse_livraison.html.twig",
             ['formulaireAdresseLivraison'=>$formulaireAdresseLivraison->createView()]);
         }
        
@@ -136,11 +138,65 @@ class UserInfosController extends AbstractController
             $em->persist($user);
             $em->flush();
         
-            return $this->render("user_adresse/traitement_formulaire_adresse_livraison.html.twig",
+            return $this->render("user_infos/traitement_formulaire_adresse_livraison.html.twig",
             ['adresseLivraison'=>$adresseLivraison]);
         }else{
-            return $this->render("user_adresse/affichage_formulaire_adresse_livraison.html.twig",
+            return $this->render("user_infos/affichage_formulaire_adresse_livraison.html.twig",
             ['formulaireAdresse'=>$formulaireAdresseLivraison->createView()]);
         }
     }
+
+    #[Route('/user/carteBancaire', name: 'user_carte_bancaire')]
+    public function addCarteBancaire(Request $req): Response
+    {
+        $carteBancaire = new CarteBancaire();
+        $formulaireCarteBancaire = $this->createForm(FormCarteBancaireClientType::class, $carteBancaire,
+        ['action'=>$this->generateUrl("user_carte_bancaire"),
+        'method'=>'POST']);
+
+        $formulaireCarteBancaire->handleRequest($req);
+
+        $cartes = $this->getUser()->getCartes();
+        if (!$cartes) {
+            return $this->render("user_infos/traitement_formulaire_carte_bancaire.html.twig",
+            ['cartes'=>$cartes]);
+
+        }
+       elseif($formulaireCarteBancaire->isSubmitted() && $formulaireCarteBancaire->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($carteBancaire);
+            $em->flush();
+            $user = $this->getUser();
+            $user->addCarte($carteBancaire);
+            $em->persist($user);
+            $em->flush();
+            $cartes = $this->getUser()->getCartes();
+            return $this->render("user_infos/traitement_formulaire_carte_bancaire.html.twig",
+            ['cartes'=>$cartes]);
+        }else{
+            return $this->render("user_infos/affichage_formulaire_carte_bancaire.html.twig",
+            ['formulaireCarteBancaire'=>$formulaireCarteBancaire->createView()]);
+        }
+    
+    }
+
+    #[Route('/user/cbRemove/{id}', name: 'user_cb_remove')]
+    public function carteBancaireRemove(Request $req): Response
+    {
+        $id = $req->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $laCarte = $em->getRepository(CarteBancaire::class)->findOneBy(array("id"=> $id));
+        $em->remove($laCarte);
+        $em->flush();
+
+        $this->addFlash('success','Carte supprimée !');
+
+        return $this->render("home/my-account.html.twig");
+       
+    }
+
+
+
+
 }

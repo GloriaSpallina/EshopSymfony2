@@ -101,6 +101,15 @@
 		</div>
 		<!-- Header End -->
 
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-sucess">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+
+
 		{% block main %}{% endblock %}
 
 		<!-- Footer Start -->

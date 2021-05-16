@@ -56,8 +56,8 @@
                                   
         
                                     <div class="action">
-                                        <button type="submit" name="addPanier"><a href="#"><i class="fa fa-cart-plus"></i></a></button>
-                                        <button type="submit" name="addWish"><a href="#"><i class="fa fa-heart"></i></a></button>
+                                        <button type="submit" name="addPanier"><a href="{{ path ('addToCart', {id: produit.id}) }}"><i class="fa fa-cart-plus"></i></a></button>
+                                        {# <button type="submit" name="addWish"><a href="#"><i class="fa fa-heart"></i></a></button> #}
                                     </div>
                                  
                                 </div>

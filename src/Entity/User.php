@@ -76,7 +76,7 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity=CarteBancaire::class, mappedBy="user")
      */
-    private $Cartes;
+    private $cartes;
 
     /**
      * @ORM\ManyToOne(targetEntity=Adresse::class, inversedBy="Users")
@@ -92,7 +92,7 @@ class User implements UserInterface
     {
         $this->Evaluations = new ArrayCollection();
         $this->Commandes = new ArrayCollection();
-        $this->Cartes = new ArrayCollection();
+        $this->cartes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -301,13 +301,13 @@ class User implements UserInterface
      */
     public function getCartes(): Collection
     {
-        return $this->Cartes;
+        return $this->cartes;
     }
 
     public function addCarte(CarteBancaire $carte): self
     {
-        if (!$this->Cartes->contains($carte)) {
-            $this->Cartes[] = $carte;
+        if (!$this->cartes->contains($carte)) {
+            $this->cartes[] = $carte;
             $carte->setUser($this);
         }
 

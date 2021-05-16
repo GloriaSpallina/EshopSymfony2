@@ -172,27 +172,28 @@ class Produit
         return $this->detailsCommandes;
     }
 
-    // public function addDetailsCommande(DetailCommande $detailsCommande): self
-    // {
-    //     if (!$this->detailsCommandes->contains($detailsCommande)) {
-    //         $this->detailsCommandes[] = $detailsCommande;
-    //         $detailsCommande->setProduit($this);
-    //     }
+    public function addDetailsCommande(DetailCommande $detailsCommande): self
+    {
+        if (!$this->detailsCommandes->contains($detailsCommande)) {
+            $this->detailsCommandes[] = $detailsCommande;
+            $detailsCommande->setProduit($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
+  
 
-    // public function removeDetailsCommande(DetailCommande $detailsCommande): self
-    // {
-    //     if ($this->detailsCommandes->removeElement($detailsCommande)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($detailsCommande->getProduit() === $this) {
-    //             $detailsCommande->setProduit(null);
-    //         }
-    //     }
+    public function removeDetailsCommande(DetailCommande $detailsCommande): self
+    {
+        if ($this->detailsCommandes->removeElement($detailsCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($detailsCommande->getProduit() === $this) {
+                $detailsCommande->setProduit(null);
+            }
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * @return Collection|Evaluation[]
