@@ -48,9 +48,14 @@
                                      <div class="quantity">
                                         <h4>Quantity: {{ produit.quantiteStock }}</h4>
                                         <div class="qty">
-                                            <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                            {# <button class="btn-minus"><i class="fa fa-minus"></i></button>
                                             <input type="text" value="1">
-                                            <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                            <button class="btn-plus"><i class="fa fa-plus"></i></button> #}
+                                            <form action="{{ path ('addToCart', {id: produit.id}) }}" method="POST">
+                                                Quantité souhaitée : <input type="number" name="quantite">
+                                                 
+                                                <button type="submit">Envoyer POST</button> 
+                                            </form>
                                         </div>
                                     </div>
                                   

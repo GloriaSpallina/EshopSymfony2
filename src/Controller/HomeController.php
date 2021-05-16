@@ -10,8 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Adresse;
+use App\Entity\Commande;
+use App\Entity\DetailCommande;
 use App\Form\ForulaireAdresseClType;
+use SessionIdInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Security;
 
 class HomeController extends AbstractController
@@ -38,12 +42,6 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route("/cart", name: 'cart')]
-    public function cart(): Response
-    {
-        return $this->render("home/cart.html.twig",[
-        ]);
-    }
 
     #[Route("/checkout", name: 'checkout')]
     public function checkout(): Response
@@ -69,6 +67,68 @@ class HomeController extends AbstractController
     public function contact(): Response
     {
         return $this->render("home/contact.html.twig");
+    }
+
+    #[Route("/cart", name: 'cart')]
+    public function cart(): Response
+    {
+        return $this->render("home/cart.html.twig",[
+        ]);
+    }
+
+    #[Route("/add/to/cart/{id}", name: 'addToCart')]
+    public function AddToCart(Request $req, SessionInterface $si): Response
+    {
+        $idProduit = $req->get('id');
+
+        $quantiteRecup = $req->get('quantite');
+        if($quantiteRecup != null){
+            $quantiteVoulue = $quantiteRecup;
+        }else{
+            $quantiteVoulue = 1;
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $rep = $em->getRepository(Produit::class);
+        $produit = $rep->find($idProduit);
+        $dc = new DetailCommande();
+        $dc->setQuantite($quantiteVoulue);
+        $dc->setProduit($produit);
+        //$commande = new Commande();
+        //Aller chercher en DB une commande 'en cours'
+        // dans le security manager, aller chercher une commande en cours et la mettre en session
+        // ou créer une nouvelle commande en cours + setStatu'en cours'
+        // mettre dans une variable l'objets qui est en session.
+        //addDetailCommande
+        // pour afficher faire comme CB.
+        // $commande->setStatus('enCours');
+        // $commande->addDetailsCommande($dc);
+        // $user = $this->getUser();
+        // $user->addCommande($commande);
+        // $commandes = $this->getUser()->getCommandes();
+        
+        // $user = $this->getUser();
+        // $commandeU = $user->getCommandes();
+        // $this->getUser()->getCommandes();
+        // $commandeU->addDetailsCommande($dc);
+        // $cm = $si->get('panier');
+        // $cm->addDetailsCommande($dc);
+        
+        // $em2=$this->getDoctrine()->getManager();
+        // $em2->persist($cm);
+        // $em2->flush($cm);
+        // $user = $this->getUser();
+        // $adresseLi = $user->getAdresseLivraison();
+        // $em2->persist($user)
+
+        // $alo = $si->get('panier');
+        // //dd($cm);
+        // dd($commandeU);
+
+        // ['commandes'=>$commandes]
+        
+        return $this->render("home/test.html.twig"
+        );
     }
 
 
