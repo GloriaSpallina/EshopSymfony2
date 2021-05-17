@@ -1,5 +1,12 @@
-{% for item in commandes %}
-   {{ item. }} 
+{% for item in test %}
+   <p>{{ item.id }} </p>
+   <p>quantité voulue : {{ item.quantite }}</p>
+   <p>id produit : {{ item.produit.id }}</p>
+   <p>nom produit : {{ item.produit.nom }}</p>
+   <p>description : {{ item.produit.description }}</p>
+   <p>prix produit : {{ item.produit.prix }}</p>
+   <p>prix total : {{ item.quantite * item.produit.prix }}
+   
+   <hr>
 {% endfor %}
 
-<p>toto</p>

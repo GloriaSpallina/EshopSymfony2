@@ -135,5 +135,19 @@ class Commande
         return $this;
     }
 
+    /**
+    * Calculer le total de la commande
+    *
+    * @return float
+    */
+    public function getTotal(): float
+    {
+        $total = 0;
 
+        foreach ($this->getDetailsCommande() as $item) {
+            $total += $item->getTotalDetailC();
+        }
+
+        return $total;
+    }
 }

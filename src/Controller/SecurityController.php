@@ -17,23 +17,46 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, SessionInterface $si): Response
     {
         if ($this->getUser()) {
-            //aller chercher en session si isPanier = null
-            $isPanier = $si->get('isPanier');
 
+            /// ajouter une condition
+            // aller en db voir si pour cette user il y a une commande avec status en cours
+            // si pas en créer une.
+            $objCommande = new Commande();
+            $objCommande->setStatus('enCours');
+            $objCommande->setDateCommande(new \DateTime(date('Y-m-d')));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($objCommande);
+            
+            $user = $this->getUser();
+            $userAdLiv = $user->getAdresseLivraison();
+            $objCommande->setAdresseLivraison($userAdLiv);
+            $user->addCommande($objCommande);
+            $em->persist($user);
+            $em->flush();
+
+            // $si->set('panier', $objCommande);
+            // $commandeEnCOurs = $si->get('panier');
+            // dd($commandeEnCOurs);
+            //aller chercher en session si isPanier = null
+            //$isPanier = $si->get('isPanier');
+            // $objCommande = new Commande();
+            // $objCommande->setStatus('enCours');
+            // $si->set('panier', $objCommande);
             // si isPanier est false alors Créer un objet Commande, le stocker dans la session (clé panier)
-            if($isPanier == null){
+            // if($isPanier == null){
                 
-                $objCommande = new Commande();
-                $si->set('isPanier', 'true');
-                $si->set('panier', $objCommande);
-                $si->set('test', 'toto');
+            //     $objCommande = new Commande();
+            //     $objCommande->setStatus('enCours');
+            //     $si->set('isPanier', 'true');
+            //     $si->set('panier', $objCommande);
+            //     $si->set('test', 'toto');
+
                 
-                
-            }else{
-                // si c'est true -> Obtenir le contenu de l'objet commande qui est notre panier.
-                $objCommandeEnAttente = $si->get('panier');
-                // le renvoyer vers où on veut.
-            }
+            // }else{
+            //     // si c'est true -> Obtenir le contenu de l'objet commande qui est notre panier.
+            //     $objCommandeEnAttente = $si->get('panier');
+            //     // le renvoyer vers où on veut.
+            // }
             
 
             return $this->redirectToRoute('myaccount');

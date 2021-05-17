@@ -73,4 +73,27 @@ class DetailCommande
 
         return $this;
     }
+
+    /**
+     * Verification si l'item est déjà présent dans le détail de commande
+     * 
+     * @param DetailCommande $item
+     * 
+     * @return bool
+     */
+    public function doublons(DetailCommande $item): bool
+    {
+        return $this->getProduit()->getId() === $item->getProduit()->getId();
+    
+    }
+
+    /**
+     * Calculer le total pour chaque ligne de commande
+     *
+     * @return float|int
+     */
+    public function getTotalDetailC(): float
+    {
+        return $this->getProduit()->getPrix() * $this->getQuantite();
+    }
 }
