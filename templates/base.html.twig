@@ -57,10 +57,15 @@
 									<a href="{{ path ('app_register') }}" class="dropdown-item">Register</a>
 								</div>
 							</div>
-							<div class="cart">
+							{# <div class="cart">
 								<a href="{{ path ('cart') }}"><i class="fa fa-cart-plus"></i>
 								<span>(0)</span></a>
-							</div>
+							</div> #}
+
+							{{ render (controller (
+    						'App\\Controller\\PanierPartielController::panierDynamique'
+    							))
+							}} 
 						</div>
 					</div>
 				</div>
@@ -87,7 +92,6 @@
 								<div class="dropdown-menu">
 									<a href="{{ path ('productlist') }}" class="dropdown-item">Product</a>
 									<a href="{{ path ('cart') }}" class="dropdown-item">Cart</a>
-									<a href="{{ path ('wishlist') }}" class="dropdown-item">Wishlist</a>
 									<a href="{{ path ('checkout') }}" class="dropdown-item">Checkout</a>
 									<a href="{{ path ('login') }}" class="dropdown-item">Login & Register</a>
 									<a href="{{ path ('myaccount') }}" class="dropdown-item">My Account</a>
@@ -142,12 +146,12 @@
 						<div class="footer-widget">
 							<h3 class="title">Quick Links</h3>
 							<ul>
-								<li><a href="product.html">Product</a></li>
-								<li><a href="cart.html">Cart</a></li>
-								<li><a href="checkout.html">Checkout</a></li>
-								<li><a href="login.html">Login & Register</a></li>
-								<li><a href="my-account.html">My Account</a></li>
-								<li><a href="wishlist.html">Wishlist</a></li>
+								<li><a href="{{ path ('productlist') }}">Product</a></li>
+								<li><a href="{{ path ('cart') }}l">Cart</a></li>
+								<li><a href="{{ path ('checkout') }}">Checkout</a></li>
+								<li><a href="{{ path ('login') }}">Login & Register</a></li>
+								<li><a href="{{ path ('myaccount') }}">My Account</a></li>
+							
 							</ul>
 						</div>
 					</div>

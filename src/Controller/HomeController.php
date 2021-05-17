@@ -47,22 +47,42 @@ class HomeController extends AbstractController
     #[Route("/checkout", name: 'checkout')]
     public function checkout(): Response
     {
-        return $this->render("home/checkout.html.twig");
+        $adresseLivraisonUser = $this->getUser()->getAdresseLivraison();
+        $adresseUser = $this->getUser()->getAdresse();
+        
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+       
+        $rep1 = $em->getRepository(Commande::class);
+        $cec = $rep1->findOneBy([
+            'status'=>'enCours',
+            'user' => $user
+        ]);
+
+       
+        $rep = $em->getRepository(DetailCommande::class);
+        $panier = $rep->findBy([
+            'commandeRef'=>$cec,
+        ]);
+
+        $totalCommande = $cec->getTotal();
+        return $this->render("home/checkout.html.twig",
+        ['adresseLivraison'=>$adresseLivraisonUser,
+        'adresse'=>$adresseUser,
+        'panier'=>$panier,
+        'total'=>$totalCommande
+        ]
+        
+    );
     }
 
     #[Route("/myaccount", name: 'myaccount')]
     public function myaccount(): Response
     {
-
         return $this->render("home/my-account.html.twig");
     }
 
 
-    #[Route("/wishlist", name: 'wishlist')]
-    public function wishlist(): Response
-    {
-        return $this->render("home/wishlist.html.twig");
-    }
 
     #[Route("/contact", name: 'contact')]
     public function contact(): Response
@@ -98,7 +118,7 @@ class HomeController extends AbstractController
 
     
     #[Route("/add/to/cart/{id}", name: 'addToCart')]
-    public function AddToCart(Request $req, SessionInterface $si): Response
+    public function AddToCart(Request $req): Response
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -152,5 +172,21 @@ class HomeController extends AbstractController
         
     }
 
-
+    #[Route("/OrderValid", name: 'place_order')]
+    public function placeOrder(): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+       
+        $rep = $em->getRepository(Commande::class);
+        $cec = $rep->findOneBy([
+            'status'=>'enCours',
+            'user' => $user
+        ]);
+        $cec->setStatus('valide');
+        $em->persist($cec);
+        $em->flush();
+        $this->addFlash('success','Commande validée!');
+        return $this->render("home/index.html.twig");
+    }
 }

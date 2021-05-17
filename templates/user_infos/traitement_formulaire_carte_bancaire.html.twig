@@ -21,10 +21,10 @@
                         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                             <a class="nav-link" href="{{ path ('myaccount') }}">Dashboard</a>
                             <a class="nav-link" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab">Orders</a>
-                            <a class="nav-link" id="payment-nav" data-toggle="pill" href="#payment-tab" role="tab">Payment Method</a>
+                            <a class="nav-link active" href="{{ path ('user_carte_bancaire') }}">Payment Method</a>
                             <a class="nav-link" href="{{ path ('user_adresse') }}">Address</a>
                             <a class="nav-link" href="{{ path ('user_adresse_livraison') }}">Shipping address</a>
-                            <a class="nav-link active" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account Details</a>
+                            <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account Details</a>
                             <a class="nav-link" href="{{ path ('logout') }}">Logout</a>
                         </div>
                     </div>
@@ -35,18 +35,22 @@
                             <div class="tab-pane fade show active" id="address-tab" role="tabpanel" aria-labelledby="address-nav">
                                 <h4>Payment Method</h4>
                                 <div class="row">
-                                {% for carte in cartes %}
+                                    {% for carte in cartes %}
+                                        <div class="col-md-6">
+                                            <p>Titulaire: {{carte.Titulaire}}</p>
+                                            <p>Numero de carte : {{carte.numeroCarte}}</p>
+                                            <p>Numero de compte : {{carte.numeroCompte}}</p>
+                                            <p>Date : {{carte.dateExpiration.format('d/m/y')}}</p>
+                                            <p>Type : {{carte.typeMoyen}}</p>
+                                        
+                                            <p><a href="{{ path ('user_cb_remove', {id: carte.id}) }}"><button class="btn">remove</button></a></p>
+                                        </div>
+                                        
+                                    {% endfor %}
+                                  
                                     <div class="col-md-6">
-                                        <p>Titulaire: {{carte.Titulaire}}</p>
-                                        <p>Numero de carte : {{carte.numeroCarte}}</p>
-                                        <p>Numero de compte : {{carte.numeroCompte}}</p>
-                                        <p>Date : {{carte.dateExpiration.format('d/m/y')}}</p>
-                                        <p>Type : {{carte.typeMoyen}}</p>
-                                      
-                                        <a href="{{ path ('user_cb_remove', {id: carte.id}) }}"><button class="btn">remove</button></a>
+                                        <a href="{{ path ('user_carte_bancaire') }}"><button class="btn">Add new card</button></a>
                                     </div>
-                                {% endfor %}
-                                <a href="{{ path ('user_carte_bancaire') }}"><button class="btn">Add</button></a>
                                 </div>
                             </div>
                         </div>

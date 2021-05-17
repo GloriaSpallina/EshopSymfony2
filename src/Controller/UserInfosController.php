@@ -95,7 +95,7 @@ class UserInfosController extends AbstractController
         $adresseLivraisonCurrentUser = $CurrentUser->getAdresseLivraison();
         if($adresseLivraisonCurrentUser !== null){
             return $this->render("user_infos/traitement_formulaire_adresse_livraison.html.twig",
-            ['adresse'=>$adresseLivraisonCurrentUser]);
+            ['adresseLivraison'=>$adresseLivraisonCurrentUser]);
         }
         elseif($formulaireAdresseLivraison->isSubmitted() && $formulaireAdresseLivraison->isValid()){
             // Il faut encore vérifier si l'adresse est déjà en DB 
@@ -157,7 +157,8 @@ class UserInfosController extends AbstractController
         $formulaireCarteBancaire->handleRequest($req);
 
         $cartes = $this->getUser()->getCartes();
-        if (!$cartes) {
+        
+        if (count($cartes) > 0) {
             return $this->render("user_infos/traitement_formulaire_carte_bancaire.html.twig",
             ['cartes'=>$cartes]);
 
