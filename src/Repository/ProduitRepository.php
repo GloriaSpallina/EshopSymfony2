@@ -19,6 +19,29 @@ class ProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, Produit::class);
     }
 
+
+     /**
+     * @return Produit[]
+     */
+
+    public function findNew(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.dateAjoutProduit >= 01/01/2015')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findCheaper(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.prix <= 150')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Produit[] Returns an array of Produit objects
     //  */

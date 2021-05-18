@@ -23,9 +23,12 @@ use Symfony\Component\Security\Core\Security;
 class HomeController extends AbstractController
 {
     #[Route("/", name: 'index')]
-    public function index(): Response
+    public function index(ProduitRepository $pr): Response
     {
-        return $this->render("home/index.html.twig");
+        return $this->render("home/index.html.twig",[
+            'NewProduits'=>$pr->findNew(),
+            'Cheapest'=>$pr->findCheaper()
+        ]);
     }
 
     #[Route("/product/list", name: 'productlist')]
