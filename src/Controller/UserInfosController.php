@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Adresse;
 use App\Entity\AdresseLivraison;
 use App\Entity\CarteBancaire;
+use App\Entity\Commande;
+use App\Entity\DetailCommande;
 use App\Form\ForulaireAdresseClType;
 use App\Form\FormAdresseLivraisonClType;
 use App\Form\FormCarteBancaireClientType;
@@ -194,6 +196,37 @@ class UserInfosController extends AbstractController
         $this->addFlash('success','Carte supprimée !');
 
         return $this->render("home/my-account.html.twig");
+       
+    }
+
+    #[Route('/user/orders', name: 'user_orders')]
+    public function ordersResume(): Response
+    {
+        $commandes = $this->getUser()->getCommandes();
+        $totaux = array();
+        foreach ($commandes as $value ) {
+            array_push($totaux, $value->getTotal());
+        }
+       
+        return $this->render("user_infos/orders.html.twig",
+        ['commandes'=>$commandes,
+        'totaux'=>$totaux]
+        );
+       
+    }
+    #[Route('/user/order/{id}/details', name: 'user_order_details')]
+    public function orderDetails(Request $req): Response
+    {
+       $idCommande = $req->get('id');
+       $em = $this->getDoctrine()->getManager();
+       $rep = $em->getRepository(DetailCommande::class);
+       $detailOrder = $rep->findBy(
+           ['commandeRef' => $idCommande]
+        );
+       
+        return $this->render("user_infos/order_detail.html.twig",
+        ['detail'=>$detailOrder]
+        );
        
     }
 

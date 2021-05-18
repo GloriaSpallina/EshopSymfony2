@@ -107,8 +107,11 @@ class HomeController extends AbstractController
         $panier = $rep->findBy([
             'commandeRef'=>$cec,
         ]);
-
-        $totalCommande = $cec->getTotal();
+        
+        if($cec){
+            $totalCommande = $cec->getTotal();
+        }
+        
 
         return $this->render("home/cart.html.twig",
             ['panier'=>$panier,
@@ -132,8 +135,6 @@ class HomeController extends AbstractController
         }else{
             $quantiteVoulue = 1;
         }
-
-        
        
         $user = $this->getUser();
         $rep1 = $em->getRepository(Commande::class);
@@ -151,6 +152,7 @@ class HomeController extends AbstractController
         
         $isDoublon = $em->getRepository(DetailCommande::class)->findOneBy([
             'produit'=>$produit,
+            'commandeRef'=>$cec
         ]);
 
         if($isDoublon){
@@ -162,11 +164,6 @@ class HomeController extends AbstractController
             $em->flush();
 
         }
-       
-       
-        
-        
-        
         
         return $this->redirectToRoute("productlist");
         
@@ -175,16 +172,16 @@ class HomeController extends AbstractController
     #[Route("/OrderValid", name: 'place_order')]
     public function placeOrder(): Response
     {
-        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-       
+
+        $em = $this->getDoctrine()->getManager();
         $rep = $em->getRepository(Commande::class);
         $cec = $rep->findOneBy([
             'status'=>'enCours',
             'user' => $user
         ]);
         $cec->setStatus('valide');
-        $em->persist($cec);
+
         $em->flush();
         $this->addFlash('success','Commande validée!');
         return $this->render("home/index.html.twig");
