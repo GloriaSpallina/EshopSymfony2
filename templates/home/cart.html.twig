@@ -42,14 +42,15 @@
                                                 <td>{{ item.produit.prix | number_format(2, ',','.') }} €</td>
                                                 <td>
                                                     <div class="qty">
-                                                        <button class="btn-minus"><i class="fa fa-minus"></i></button>
+                                                        {# <button class="btn-minus"><i class="fa fa-minus"></i></button> #}
                                                         {# ajouter un form ?  #}
                                                         {{ item.quantite }}
-                                                        <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                                        {# <button class="btn-plus"><i class="fa fa-plus"></i></button> #}
                                                     </div>
                                                 </td>
                                                 <td>{{ (item.quantite * item.produit.prix) | number_format(2, ',','.') }}€</td>
-                                                <td><button><i class="fa fa-trash"></i></button></td>
+                                                {# <td><button><i class="fa fa-trash"></i></button></td> #}
+                                                <td><a href="{{ path ('removeProduitPanier', {id: item.id}) }}"><button class="btn"><i class="fa fa-trash"></i></button></a></td>
                                             </tr>
                                         {% endfor %}
                                     {% else %}
@@ -65,6 +66,7 @@
                         </div>
                     </div>
                 </div>
+                
                 {% if panier|length > 0 %}
                 <div class="row">
                     <div class="col-md-6">
@@ -82,7 +84,7 @@
                                 <h4>Grand Total<span>{{ (total + 5) | number_format(2, ',','.') }} €</span></h4>
                             </div>
                             <div class="cart-btn">
-                                <button>Update Cart</button>
+                                {# <button>Update Cart</button> #}
                                 <a href="{{ path ('checkout') }}"><button class="btn">Checkout</button></a>
                             </div>
                         </div>

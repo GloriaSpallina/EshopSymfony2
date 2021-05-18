@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Adresse;
 use App\Entity\Commande;
 use App\Entity\DetailCommande;
+use App\Entity\Evaluation;
 use App\Form\ForulaireAdresseClType;
 use App\Repository\DetailCommandeRepository;
 use SessionIdInterface;
@@ -36,10 +37,61 @@ class HomeController extends AbstractController
     }
 
     #[Route("/product/{id}/detail", name: 'productdetail')]
-    public function productDetail(Produit $produit): Response
+    public function productDetail(Produit $produit, Request $req): Response
     {
+        if($this->getUser()){
+            $idProduit= $req->get('id');
+            $em = $this->getDoctrine()->getManager();
+            $user = $this->getUser();
+            $rep = $em->getRepository(Commande::class);
+            $commandeValidees = $rep->findBy([
+                'status'=>'valide',
+                'user' => $user
+            ]);
+            
+            if ($commandeValidees) {
+                foreach ($commandeValidees as $value) {
+                    $idDerniereCommande = $value->getId();
+                }
+                $rep1 = $em->getRepository(DetailCommande::class);
+                $isCommande = $rep1->findBy([
+                    'commandeRef'=> $idDerniereCommande,
+                    'produit'=>$idProduit
+                ]);
+
+                $reviews = $produit->getEvaluations();
+            
+
+                if($isCommande){
+                    return $this->render("home/product-detail.html.twig", [
+                        'produit'=>$produit,
+                        'isCommande'=>true,
+                        'reviews'=>$reviews
+                    ]);
+                }else{
+                    return $this->render("home/product-detail.html.twig", [
+                        'produit'=>$produit,
+                        'isCommande'=>false,
+                        'reviews'=>$reviews
+                    ]);
+                }
+                
+            }
+           
+
+
+          
+
+            
+        }
+      
+        $reviews = $produit->getEvaluations();
+       
+
         return $this->render("home/product-detail.html.twig", [
             'produit'=>$produit,
+            'isCommande'=>false,
+            'reviews'=>$reviews
         ]);
     }
 
@@ -47,9 +99,20 @@ class HomeController extends AbstractController
     #[Route("/checkout", name: 'checkout')]
     public function checkout(): Response
     {
+        
         $adresseLivraisonUser = $this->getUser()->getAdresseLivraison();
         $adresseUser = $this->getUser()->getAdresse();
         
+
+        if (!$adresseUser) {
+            return $this->redirectToRoute('user_adresse',
+            ['messageErreur'=> "Veuillez remplir vos coordonnées"]);
+        }
+        if (!$adresseLivraisonUser) {
+            return $this->redirectToRoute('user_adresse_livraison',
+            ['messageErreur'=> "Veuillez remplir vos coordonnées"]);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
        
@@ -119,6 +182,42 @@ class HomeController extends AbstractController
         );
     }
 
+    #[Route("/cart/remove/product/{id}", name: 'removeProduitPanier')]
+    public function cartRemoveProduct(Request $req): Response
+    {
+        $idDetailCommande = $req->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $detailCommande = $em->getRepository(DetailCommande::class)->find($idDetailCommande);
+
+        $em->remove($detailCommande);
+        $em->flush();
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+       
+        $rep1 = $em->getRepository(Commande::class);
+        $cec = $rep1->findOneBy([
+            'status'=>'enCours',
+            'user' => $user
+        ]);
+
+       
+        $rep = $em->getRepository(DetailCommande::class);
+        $panier = $rep->findBy([
+            'commandeRef'=>$cec,
+        ]);
+        
+        if($cec){
+            $totalCommande = $cec->getTotal();
+        }
+
+        return $this->render("home/cart.html.twig",
+        ['panier'=>$panier,
+        'total'=>$totalCommande]
+    );
+    }
+
     
     #[Route("/add/to/cart/{id}", name: 'addToCart')]
     public function AddToCart(Request $req): Response
@@ -186,4 +285,28 @@ class HomeController extends AbstractController
         $this->addFlash('success','Commande validée!');
         return $this->render("home/index.html.twig");
     }
+
+    #[Route("/add/review/{id}", name: 'add_review')]
+    public function addRiew(Request $req, Produit $p): Response
+    {
+        $idProduit = $req->get('id');
+        $commentaire = $req->get('review');
+        $note = $req->get('note');
+        $user = $this->getUser();
+
+        $review = new Evaluation();
+        $review->setCommentaire($commentaire);
+        $review->setNote($note);
+        $review->setStatus('valide'); // mettre false et dois être validé par admin
+        $review->setDateEvaluation(new \DateTime(date('Y-m-d')));
+        $review->setProduit($p);
+        $review->setUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($review);
+        $em->flush();
+
+        return $this->redirectToRoute("productlist");
+    }
+
 }
