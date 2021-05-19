@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use App\Data\SearchData;
 
 /**
  * @method Produit|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +16,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProduitRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Produit::class);
+        $this->paginator = $paginator;
     }
 
 
@@ -41,6 +44,36 @@ class ProduitRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function obtenirResultatsFiltres(SearchData $objFiltres)
+    {
+       
+        $reqQB = $this->createQueryBuilder('produit');
+             
+
+
+        if (!empty($objFiltres->search)) {
+            $reqQB = $reqQB->andWhere('produit.nom LIKE :search')
+                ->setParameter('search', '%' . $objFiltres->search . '%'); // le LIKE a besoin de % %
+        }
+      
+        if (!empty($objFiltres->minPrix)) {
+            $reqQB = $reqQB->andWhere('produit.prix >= :minPrix')
+                ->setParameter('minPrix', $objFiltres->minPrix);
+        }
+
+  
+
+
+        $reqQBQuery = $reqQB->getQuery();
+        return $this->paginator->paginate(
+            $reqQBQuery,
+            $objFiltres->numeroPage, 
+            12
+        );
+    }
+
+
 
     // /**
     //  * @return Produit[] Returns an array of Produit objects

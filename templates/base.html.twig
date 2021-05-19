@@ -41,12 +41,14 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="search">
+						{# <div class="search">
 							<input type="text" placeholder="Search">
 							<button>
 								<i class="fa fa-search"></i>
 							</button>
-						</div>
+						</div> #}
+
+						
 					</div>
 					<div class="col-md-3">
 						<div class="user">
@@ -87,30 +89,33 @@
 						<div class="navbar-nav m-auto">
 							<a href="{{ path ('index') }}" class="nav-item nav-link active">Home</a>
 							<a href="{{ path ('productlist') }}" class="nav-item nav-link">Products</a>
-							<div class="nav-item dropdown">
+							<a href="{{ path ('myaccount') }}" class="nav-item nav-link">My Account</a>
+							{# <div class="nav-item dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
 								<div class="dropdown-menu">
 									<a href="{{ path ('productlist') }}" class="dropdown-item">Product</a>
 									<a href="{{ path ('cart') }}" class="dropdown-item">Cart</a>
 									<a href="{{ path ('checkout') }}" class="dropdown-item">Checkout</a>
 									<a href="{{ path ('login') }}" class="dropdown-item">Login & Register</a>
-									<a href="{{ path ('myaccount') }}" class="dropdown-item">My Account</a>
+									
 								</div>
-							</div>
+							</div> #}
 							<a href="{{ path ('contact') }}" class="nav-item nav-link">Contact Us</a>
 						</div>
 					</div>
 				</nav>
-			</div>
-		</div>
-		<!-- Header End -->
-
-
-		{% for message in app.flashes('success') %}
+				{% for message in app.flashes('success') %}
 			<div class="alert alert-sucess">
 				{{ message }}
 			</div>
 		{% endfor %}
+			</div>
+
+		</div>
+		<!-- Header End -->
+
+
+		
 
 
 
@@ -134,10 +139,12 @@
 							<h3 class="title">Useful Pages</h3>
 							<ul>
 								<li><a href="{{ path ('productlist') }}">Product</a></li>
-								<li><a href="{{ path ('cart') }}">Cart</a></li>
-								<li><a href="{{ path ('checkout') }}">Checkout</a></li>
-								<li><a href="{{ path ('login') }}">Login & Register</a></li>
-								<li><a href="{{ path ('myaccount') }}">My Account</a></li>
+								{% if app.user %}
+									<li><a href="{{ path ('cart') }}">Cart</a></li>
+								{% endif %}
+								<li><a href="{{ path ('login') }}">Login</a></li>
+								<li><a href="{{ path ('app_register') }}">Register</a></li>
+								
 							</ul>
 						</div>
 					</div>
@@ -147,10 +154,11 @@
 							<h3 class="title">Quick Links</h3>
 							<ul>
 								<li><a href="{{ path ('productlist') }}">Product</a></li>
-								<li><a href="{{ path ('cart') }}l">Cart</a></li>
-								<li><a href="{{ path ('checkout') }}">Checkout</a></li>
-								<li><a href="{{ path ('login') }}">Login & Register</a></li>
-								<li><a href="{{ path ('myaccount') }}">My Account</a></li>
+								{% if app.user %}
+									<li><a href="{{ path ('cart') }}">Cart</a></li>
+								{% endif %}
+								<li><a href="{{ path ('login') }}">Login</a></li>
+								<li><a href="{{ path ('app_register') }}">Register</a></li>
 							
 							</ul>
 						</div>

@@ -83,10 +83,25 @@
                                 <p>Shipping Cost<span>5 €</span></p>
                                 <h4>Grand Total<span>{{ (total + 5) | number_format(2, ',','.') }} €</span></h4>
                             </div>
+                            {% if adresse == null %}
                             <div class="cart-btn">
-                                {# <button>Update Cart</button> #}
-                                <a href="{{ path ('checkout') }}"><button class="btn">Checkout</button></a>
+                                <p> Veuillez entrer une adresse pour pouvoir confirmer votre commande </p>
+
+                                <a href="{{ path ('user_adresse') }}"><button class="btn">Ajouter une adresse</button></a>
                             </div>
+                            {% elseif adresseLivraison == null %}
+                                <p> Veuillez entrer une adresse de livraison pour pouvoir confirmer votre commande </p>
+
+                                <a href="{{ path ('user_adresse_livraison') }}"><button class="btn">Ajouter une adresse de livraison</button></a>
+                            {% else %}
+                                <div class="cart-btn">
+                                {# <button>Update Cart</button> #}
+                                    <a href="{{ path ('checkout') }}"><button class="btn">Checkout</button></a>
+                                </div>
+                                
+                            {% endif %}
+                            
+                            
                         </div>
                     </div>
                     {% else %}

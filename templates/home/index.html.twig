@@ -13,7 +13,89 @@
         <!-- Main Slider End -->
         
         
-        <!-- Feature Start-->
+       
+        
+        
+        <!-- Category Start-->
+        {# <div class="category">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="category-img">
+                            <img src="/assets/img/category-1.jpg" />
+                            <a class="category-name" href="">
+                                <h2>Category Name</h2>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="category-img">
+                            <img src="/assets/img/category-3.jpg" />
+                            <a class="category-name" href="">
+                                <h2>Category Name</h2>
+                            </a>
+                        </div>
+                        <div class="category-img">
+                            <img src="/assets/img/category-4.jpg" />
+                            <a class="category-name" href="">
+                                <h2>Category Name</h2>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="category-img">
+                            <img src="/assets/img/category-2.jpg" />
+                            <a class="category-name" href="">
+                                <h2>Category Name</h2>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> #}
+        <!-- Category End-->
+        
+        
+        <!-- Cheapet Product Start -->
+        <div class="recent-product">
+            <div class="container">
+                <div class="section-header">
+                    <h3>Produits à moins de 150€ !</h3>
+                    <p>
+                        Voici une sélection des produits les moins cher du site !
+                    </p>
+                </div>
+                <div class="row align-items-center product-slider product-slider-4">
+                   {% for p in Cheapest %}
+                       <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-image">
+                                <a href="{{ path ('productdetail', {id: p.id}) }}">
+                                    <img src="/assets/img/product-2.png" alt="Product Image">
+                                </a>
+                                <div class="product-action">
+                                {% if app.user %}
+                                    <a href="href="{{ path ('addToCart', {id: p.id}) }}""><i class="fa fa-cart-plus"></i></a>
+                                {% endif %}
+                                
+                                    
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <div class="title"><a href="{{ path ('productdetail', {id: p.id}) }}">{{p.nom}}</a></div>
+                                <div class="price">{{p.prix | number_format(2)}} €</div>
+                            </div>
+                        </div>
+                    </div>
+                   {% endfor %}
+                    
+                    
+                </div>
+            </div>
+        </div>
+        <!-- cheaper Product End -->
+        
+         <!-- Feature Start-->
         <div class="feature">
             <div class="container-fluid">
                 <div class="row">
@@ -57,84 +139,6 @@
             </div>
         </div>
         <!-- Feature End-->
-        
-        
-        <!-- Category Start-->
-        <div class="category">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="/assets/img/category-1.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="/assets/img/category-3.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                        <div class="category-img">
-                            <img src="/assets/img/category-4.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="category-img">
-                            <img src="/assets/img/category-2.jpg" />
-                            <a class="category-name" href="">
-                                <h2>Category Name</h2>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Category End-->
-        
-        
-        <!-- Cheapet Product Start -->
-        <div class="recent-product">
-            <div class="container">
-                <div class="section-header">
-                    <h3>Produits à moins de 150€ !</h3>
-                    <p>
-                        Voici une sélection des produits les moins cher du site !
-                    </p>
-                </div>
-                <div class="row align-items-center product-slider product-slider-4">
-                   {% for p in Cheapest %}
-                       <div class="col-lg-3">
-                        <div class="product-item">
-                            <div class="product-image">
-                                <a href="{{ path ('productdetail', {id: p.id}) }}">
-                                    <img src="/assets/img/product-2.png" alt="Product Image">
-                                </a>
-                                <div class="product-action">
-                                    <a href="href="{{ path ('addToCart', {id: p.id}) }}""><i class="fa fa-cart-plus"></i></a>
-                                </div>
-                            </div>
-                            <div class="product-content">
-                                <div class="title"><a href="{{ path ('productdetail', {id: p.id}) }}">{{p.nom}}</a></div>
-                                <div class="price">{{p.prix | number_format(2)}} €</div>
-                            </div>
-                        </div>
-                    </div>
-                   {% endfor %}
-                    
-                    
-                </div>
-            </div>
-        </div>
-        <!-- cheaper Product End -->
-        
-        
         {# <!-- Newsletter Start -->
         <div class="newsletter">
             <div class="container">
@@ -171,7 +175,9 @@
                                     <img src="/assets/img/product-2.png" alt="Product Image">
                                 </a>
                                 <div class="product-action">
+                                     {% if app.user %}
                                     <a href="href="{{ path ('addToCart', {id: p.id}) }}""><i class="fa fa-cart-plus"></i></a>
+                                {% endif %}
                                 </div>
                             </div>
                             <div class="product-content">

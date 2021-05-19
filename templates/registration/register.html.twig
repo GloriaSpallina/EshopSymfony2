@@ -16,6 +16,26 @@
             </div>
         </div>
 <!-- Breadcrumb End -->
+{% if app.user %}
+<div class="container">
+<div class="row">
+        <div class="col-md-6">                
+            <div class="register-form">
+                <div class="row">
+                <div class="col-md-6">  
+                    <p>Vous avez déjà un compte.</p>
+                    <p><a href="{{ path ('logout') }}"><button class="btn">Logout</button></a></p>
+                    <p><a href="{{ path ('productlist') }}"><button class="btn">Product</button></a></p>
+					<p><a href="{{ path ('cart') }}"><button class="btn">Cart</button></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+{% else %}
+    
+
 {{ form_start(registrationForm) }}
  <!-- Login Start -->
         <div class="login">
@@ -68,8 +88,9 @@
 </div>
        
         <!-- Login End -->
-       {{ form_end(registrationForm) }}
+ {{ form_end(registrationForm) }}
 
-
+{% endif %}
    
 {% endblock %}
+

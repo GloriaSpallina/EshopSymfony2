@@ -13,6 +13,8 @@ use App\Entity\DetailCommande;
 use App\Entity\Evaluation;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Data\SearchData;
+use App\Form\SearchType;
 
 
 
@@ -29,20 +31,41 @@ class HomeController extends AbstractController
     }
 
     #[Route("/product/list", name: 'productlist')]
-    public function productlist(ProduitRepository $produitRepository, PaginatorInterface $paginator, Request $request): Response
+    public function productlist(ProduitRepository $rep, PaginatorInterface $paginator, Request $request,Request $req): Response
     {
-        $produits = $this->getDoctrine()->getRepository(Produit::class)->findAll();
-        $numeroPage = $request->query->getInt('page',1);
+      
 
-        $paginationProduits = $paginator->paginate(
-            $produits,
-            $numeroPage,
-            12
+        $data = new SearchData(); 
+        $form = $this->createForm(
+            SearchType::class,
+            $data,
+            ['action'=>$this->generateUrl("productlist"),
+            'method'=>'GET']
         );
 
-        return $this->render("home/product-list.html.twig",[
-            'produits'=>$paginationProduits
-        ]);
+        $data->numeroPage = $req->get('page', 1); 
+        $form->handleRequest($req);
+
+
+        $ProduitsFiltres = [];
+        if ($form->isSubmitted()) {
+           
+            $ProduitsFiltres = $rep->obtenirResultatsFiltres($data);
+        } else {
+           
+
+            $ProduitsFiltres = $rep->obtenirResultatsFiltres($data);
+        }
+
+        
+        $vars = [
+            'produitsFiltres' => $ProduitsFiltres,
+            'form' => $form->createView()
+        ];
+
+        return $this->render("home/product-list.html.twig", $vars
+        // ['produits'=>$paginationProduits]
+    );
     }
 
     #[Route("/product/{id}/detail", name: 'productdetail')]
@@ -165,8 +188,12 @@ class HomeController extends AbstractController
     #[Route("/cart", name: 'cart')]
     public function cart(): Response
     {
+        if($this->getUser()){
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
+
+        $adresseLivraisonUser = $this->getUser()->getAdresseLivraison();
+        $adresseUser = $this->getUser()->getAdresse();
        
         $rep1 = $em->getRepository(Commande::class);
         $cec = $rep1->findOneBy([
@@ -183,12 +210,22 @@ class HomeController extends AbstractController
         if($cec){
             $totalCommande = $cec->getTotal();
         }
+
+    
+        
         
 
         return $this->render("home/cart.html.twig",
             ['panier'=>$panier,
-            'total'=>$totalCommande]
+            'total'=>$totalCommande,
+            'adresseLivraison'=>$adresseLivraisonUser,
+            'adresse'=>$adresseUser,
+            ]
         );
+        }else{
+            return $this->redirectToRoute('login');
+        }
+        
     }
 
     #[Route("/cart/remove/product/{id}", name: 'removeProduitPanier')]
