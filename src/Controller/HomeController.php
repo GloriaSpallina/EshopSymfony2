@@ -4,21 +4,18 @@ namespace App\Controller;
 
 
 use App\Entity\Produit;
-
 use App\Repository\ProduitRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Adresse;
 use App\Entity\Commande;
 use App\Entity\DetailCommande;
 use App\Entity\Evaluation;
-use App\Form\ForulaireAdresseClType;
-use App\Repository\DetailCommandeRepository;
-use SessionIdInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Security;
+use Knp\Component\Pager\PaginatorInterface;
+
+
+
 
 class HomeController extends AbstractController
 {
@@ -32,10 +29,19 @@ class HomeController extends AbstractController
     }
 
     #[Route("/product/list", name: 'productlist')]
-    public function productlist(ProduitRepository $produitRepository): Response
+    public function productlist(ProduitRepository $produitRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $produits = $this->getDoctrine()->getRepository(Produit::class)->findAll();
+        $numeroPage = $request->query->getInt('page',1);
+
+        $paginationProduits = $paginator->paginate(
+            $produits,
+            $numeroPage,
+            12
+        );
+
         return $this->render("home/product-list.html.twig",[
-            'produits'=>$produitRepository->findAll()
+            'produits'=>$paginationProduits
         ]);
     }
 
