@@ -18,9 +18,7 @@ class SecurityController extends AbstractController
     {
         if ($this->getUser()) {
 
-            /// ajouter une condition
-            // aller en db voir si pour cette user il y a une commande avec status en cours
-            // si pas en créer une.
+           
             $objCommande = new Commande();
             $objCommande->setStatus('enCours');
             $objCommande->setDateCommande(new \DateTime(date('Y-m-d')));
@@ -34,31 +32,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            // $si->set('panier', $objCommande);
-            // $commandeEnCOurs = $si->get('panier');
-            // dd($commandeEnCOurs);
-            //aller chercher en session si isPanier = null
-            //$isPanier = $si->get('isPanier');
-            // $objCommande = new Commande();
-            // $objCommande->setStatus('enCours');
-            // $si->set('panier', $objCommande);
-            // si isPanier est false alors Créer un objet Commande, le stocker dans la session (clé panier)
-            // if($isPanier == null){
-                
-            //     $objCommande = new Commande();
-            //     $objCommande->setStatus('enCours');
-            //     $si->set('isPanier', 'true');
-            //     $si->set('panier', $objCommande);
-            //     $si->set('test', 'toto');
-
-                
-            // }else{
-            //     // si c'est true -> Obtenir le contenu de l'objet commande qui est notre panier.
-            //     $objCommandeEnAttente = $si->get('panier');
-            //     // le renvoyer vers où on veut.
-            // }
-            
-
+         
             return $this->redirectToRoute('myaccount');
         }
 

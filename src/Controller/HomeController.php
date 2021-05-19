@@ -256,6 +256,8 @@ class HomeController extends AbstractController
         
         if($cec){
             $totalCommande = $cec->getTotal();
+
+            
         }
 
         return $this->render("home/cart.html.twig",
@@ -329,7 +331,7 @@ class HomeController extends AbstractController
 
         $em->flush();
         $this->addFlash('success','Commande validée!');
-        return $this->render("home/index.html.twig");
+        return $this->redirectToRoute('index');
     }
 
     #[Route("/add/review/{id}", name: 'add_review')]

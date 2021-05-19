@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Commande;
 use App\Form\RegistrationFormType;
-use App\Security\FormulaireLoginAuthAuthenticator;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Security\FormulaireLoginAuthAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -41,6 +42,28 @@ class RegistrationController extends AbstractController
                 $authenticator,
                 'main' // firewall name in security.yaml
             );
+            if ($this->getUser()) {
+
+                /// ajouter une condition
+                // aller en db voir si pour cette user il y a une commande avec status en cours
+                // si pas en créer une.
+                $objCommande = new Commande();
+                $objCommande->setStatus('enCours');
+                $objCommande->setDateCommande(new \DateTime(date('Y-m-d')));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($objCommande);
+                
+                $user = $this->getUser();
+                $userAdLiv = $user->getAdresseLivraison();
+                $objCommande->setAdresseLivraison($userAdLiv);
+                $user->addCommande($objCommande);
+                $em->persist($user);
+                $em->flush();
+    
+                
+    
+                return $this->redirectToRoute('myaccount');
+            }
         }
 
         return $this->render('registration/register.html.twig', [
