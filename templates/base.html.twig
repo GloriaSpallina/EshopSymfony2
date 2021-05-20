@@ -53,11 +53,8 @@
 					<div class="col-md-3">
 						<div class="user">
 							<div class="dropdown">
-							{% if app.user %}
-								<a href="{{ path ('myaccount') }}" class="dropdown-toggle" data-toggle="dropdown">My Account 42</a>
-							{% endif %}
 							
-								
+								<a href="{{ path ('myaccount') }}" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
 								<div class="dropdown-menu">
 									<a href="{{ path ('login') }}" class="dropdown-item">Login</a>
 									<a href="{{ path ('app_register') }}" class="dropdown-item">Register</a>
@@ -89,7 +86,11 @@
 						<div class="navbar-nav m-auto">
 							<a href="{{ path ('index') }}" class="nav-item nav-link active">Home</a>
 							<a href="{{ path ('productlist') }}" class="nav-item nav-link">Products</a>
-							<a href="{{ path ('myaccount') }}" class="nav-item nav-link">My Account</a>
+							{% if app.user %}
+								<a href="{{ path ('myaccount') }}" class="nav-item nav-link">My Account</a>
+							{% endif %}
+							
+							
 							{# <div class="nav-item dropdown">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
 								<div class="dropdown-menu">

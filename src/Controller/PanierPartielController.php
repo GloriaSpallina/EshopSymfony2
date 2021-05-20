@@ -12,7 +12,7 @@ class PanierPartielController extends AbstractController
 {
     public function panierDynamique()
     {
-
+        
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
        
