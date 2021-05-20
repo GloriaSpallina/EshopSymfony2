@@ -2,5 +2,11 @@
 
 <div class="cart">
 	<a href="{{ path ('cart') }}"><i class="fa fa-cart-plus"></i>
+	{% if app.user %}
 	<span>({{panier|length}})</span></a>
+	{% else %}
+		<span>(0)</span></a>
+	{% endif %}
+	
+	
 </div>

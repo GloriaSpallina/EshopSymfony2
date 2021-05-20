@@ -53,16 +53,16 @@
 					<div class="col-md-3">
 						<div class="user">
 							<div class="dropdown">
-								<a href="{{ path ('myaccount') }}" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
+							{% if app.user %}
+							<a href="{{ path ('myaccount') }}" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
+							{% endif %}
+							
+								
 								<div class="dropdown-menu">
 									<a href="{{ path ('login') }}" class="dropdown-item">Login</a>
 									<a href="{{ path ('app_register') }}" class="dropdown-item">Register</a>
 								</div>
 							</div>
-							{# <div class="cart">
-								<a href="{{ path ('cart') }}"><i class="fa fa-cart-plus"></i>
-								<span>(0)</span></a>
-							</div> #}
 
 							{{ render (controller (
     						'App\\Controller\\PanierPartielController::panierDynamique'
